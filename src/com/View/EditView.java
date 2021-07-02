@@ -1,7 +1,7 @@
 package com.View;
 
 import com.Model.UserInfo;
-import com.UserService;
+import com.Service.UserService;
 
 import javax.swing.*;
 import java.awt.*;
