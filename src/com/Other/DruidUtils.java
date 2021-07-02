@@ -1,4 +1,4 @@
-package com;
+package com.Other;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 

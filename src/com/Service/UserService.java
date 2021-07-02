@@ -1,4 +1,4 @@
-package com;
+package com.Service;
 
 import com.DAO.UserDAO;
 import com.Model.UserInfo;

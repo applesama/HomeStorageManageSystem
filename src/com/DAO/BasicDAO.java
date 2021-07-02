@@ -1,9 +1,10 @@
 package com.DAO;
 
-import com.DruidUtils;
+import com.Other.DruidUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ColumnListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import java.sql.Connection;
@@ -56,7 +57,7 @@ public class BasicDAO<E> {
         }
     }
 
-    public Object queryScalar(String sql, Object... params){
+    public Object queryScalar(String sql, Object... params) {
         Connection connection = null;
         try {
             connection = DruidUtils.getConnection();
@@ -69,4 +70,20 @@ public class BasicDAO<E> {
             DruidUtils.close(null, null, connection);
         }
     }
+
+    public Object queryMultiScalar(String sql, Object... params){
+        Connection connection = null;
+        try {
+            connection = DruidUtils.getConnection();
+            return qr.query(connection, sql, new ColumnListHandler<>(), params);
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            DruidUtils.close(null, null, connection);
+        }
+    }
+
+
 }

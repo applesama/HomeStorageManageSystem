@@ -16,9 +16,9 @@ public class Main {
         //loginView.addFrm();
         //EditView editView = new EditView();
         //editView.addFrm();
-        MainView mainView = new MainView();
-        mainView.addFrm();
-
+        //MainView mainView = new MainView();
+        //mainView.addFrm();
+        
 
 
 
