@@ -2,6 +2,7 @@ package com;
 
 
 import com.Model.UserInfo;
+import com.View.AddView;
 import com.View.LoginView;
 import com.View.MainView;
 
@@ -16,19 +17,11 @@ public class Main {
         //loginView.addFrm();
         //EditView editView = new EditView();
         //editView.addFrm();
-        //MainView mainView = new MainView();
-        //mainView.addFrm();
-        
-
-
-
-
-
+        MainView mainView = new MainView();
+        mainView.addFrm();
+        //AddView addView = new AddView();
+        //addView.addFrm();
         //MainView
-        new Main();
-
-
-
-
+        //new Main();
     }
 }

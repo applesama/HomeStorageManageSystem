@@ -7,7 +7,7 @@ import java.util.List;
 public class NewTableModel extends AbstractTableModel {
 
     private List<ItemInfo> itemInfo;
-    private String[] column = new String[]{"Id","Name","Type","Number","Exp_Date","Adder","LastUser","LastOps","Exp.(day)","Added_Date"};
+    private String[] column = new String[]{"Id","Name","Type","Number","Exp_Date","Adder","Exp.(day)","Added_Date"};
 
     public NewTableModel(List<ItemInfo> itemInfo){
         this.itemInfo = itemInfo;
@@ -29,7 +29,7 @@ public class NewTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int r, int c) {
-        Object data = "";//"Id","Name","Type","Number","Date","Adder","LastUser","LastOps","Exp.(day)"
+        Object data = "";
         switch (c){
             case 0:
                 data = itemInfo.get(r).getItem_id().toString();
@@ -53,15 +53,9 @@ public class NewTableModel extends AbstractTableModel {
                 data = itemInfo.get(r).getItem_adder();
                 break;
             case 6:
-                data = itemInfo.get(r).getItem_lastUser();
-                break;
-            case 7:
-                data = itemInfo.get(r).getItem_lastOps().toString();
-                break;
-            case 8:
                 data = itemInfo.get(r).getItem_expDay();
                 break;
-            case 9:
+            case 7:
                 data = itemInfo.get(r).getItem_add_date();
         }
         return data;
@@ -80,6 +74,10 @@ public class NewTableModel extends AbstractTableModel {
 
     public String getNote(int row){
         return itemInfo.get(row).getItem_notes();
+    }
+
+    public int getId(int row){
+        return itemInfo.get(row).getItem_id();
     }
 
 
