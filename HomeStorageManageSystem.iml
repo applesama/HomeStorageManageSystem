@@ -10,5 +10,8 @@
     <orderEntry type="library" name="mysql-connector-java-8.0.25" level="project" />
     <orderEntry type="library" name="druid-1.2.6" level="project" />
     <orderEntry type="library" name="commons-dbutils-1.7" level="project" />
+    <orderEntry type="library" name="swt-datepicker-1.01" level="project" />
+    <orderEntry type="library" name="swt" level="project" />
+    <orderEntry type="library" name="swingx-core-1.6.2" level="project" />
   </component>
 </module>
