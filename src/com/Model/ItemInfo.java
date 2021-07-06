@@ -13,27 +13,20 @@ public class ItemInfo {
     private Integer item_number;
     private java.sql.Date item_date;
     private String item_adder;
-    private String item_lastUser;
-    private Integer item_lastOps;
     private String item_notes;
     private java.sql.Date item_add_date;
 
     public ItemInfo() {
     }
 
-    public ItemInfo(boolean bool){
-        Random r = new Random();
-        int n = r.nextInt(10) + 1;
-         item_id =  n;
-         item_name = "name";
-        item_type = "type";
-        item_number = 1;
-         item_date = new java.sql.Date(System.currentTimeMillis());
-         item_adder = "adder";
-         item_lastUser = "lUser";
-        item_lastOps = 1;
-         item_notes = Integer.toString(n);
-    }
+   /* public ItemInfo(String item_name, String item_type, int item_number, java.sql.Date item_date, String item_adder, String item_notes, Date item_add_date){
+        this.item_name = item_name;
+        this.item_type = item_type;
+        this.item_number = item_number;
+        this.item_date = item_date;
+        this.item_adder =
+    }*/
+
 
     public Integer getItem_id() {
         return item_id;
@@ -57,19 +50,12 @@ public class ItemInfo {
         return item_adder;
     }
 
-    public String getItem_lastUser() {
-        return item_lastUser;
-    }
-
-    public Integer getItem_lastOps() {
-        return item_lastOps;
-    }
 
     public String getItem_notes() {
         return item_notes;
     }
 
-    public Date getItem_add_date() {
+    public java.sql.Date getItem_add_date() {
         return item_add_date;
     }
 
@@ -95,19 +81,11 @@ public class ItemInfo {
         this.item_adder = item_adder;
     }
 
-    public void setItem_lastUser(String item_lastUser) {
-        this.item_lastUser = item_lastUser;
-    }
-
-    public void setItem_lastOps(Integer item_lastOps) {
-        this.item_lastOps = item_lastOps;
-    }
-
     public void setItem_notes(String item_notes) {
         this.item_notes = item_notes;
     }
 
-    public void setItem_add_date(Date item_add_date) {
+    public void setItem_add_date(java.sql.Date item_add_date) {
         this.item_add_date = item_add_date;
     }
 
@@ -115,7 +93,7 @@ public class ItemInfo {
         if(item_date == null){
             return "Not available";
         }
-        Long value = ((item_date.getTime() - System.currentTimeMillis()) / (24*3600*1000));
+        long value = ((item_date.getTime() - System.currentTimeMillis()) / (24*3600*1000));
         if(value <= 0){
             return "Expired!";
         }

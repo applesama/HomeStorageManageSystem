@@ -55,7 +55,6 @@ public class EditView extends JFrame {
             userName.setFont(font);
             userName.setBounds(20, 20, 130, 30);
             add(userName);
-
             userInput1.setBounds(160, 20, 130, 30);
             add(userInput1);
         }
@@ -121,7 +120,7 @@ public class EditView extends JFrame {
             JOptionPane.showMessageDialog(null, "One or more of the fields are empty", "Warning", JOptionPane.ERROR_MESSAGE);
         }
         else if(!String.valueOf(userInput3.getPassword()).equals(String.valueOf(userInput4.getPassword()))){
-            JOptionPane.showMessageDialog(null, "Two new password is not equal", "Warning", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Two new password are not equal", "Warning", JOptionPane.ERROR_MESSAGE);
         }else{
             addAct(userInput1.getText(), String.valueOf(userInput3.getPassword()));
         }
@@ -138,7 +137,7 @@ public class EditView extends JFrame {
             this.dispose();
             return;
         }
-        JOptionPane.showMessageDialog(null, "User adding failed", "Warning", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "User addition failed", "Warning", JOptionPane.ERROR_MESSAGE);
     }
 
 

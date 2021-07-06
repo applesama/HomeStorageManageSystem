@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="swt-datepicker-1.01">
+    <CLASSES />
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/libs/swt-datepicker-1.01.jar!/" />
+    </SOURCES>
+  </library>
+</component>

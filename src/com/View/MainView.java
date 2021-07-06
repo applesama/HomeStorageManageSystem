@@ -5,30 +5,26 @@ import com.Model.UserInfo;
 import com.Other.NewTableModel;
 import com.Service.ItemService;
 import com.Service.UserService;
-
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.io.File;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class MainView extends JFrame {
 
-    private UserService userService = new UserService();
-    private ItemService itemService = new ItemService();
-    private UserInfo userInfo = null;
+    private static UserService userService = new UserService();
+    private static ItemService itemService = new ItemService();
+    private static UserInfo userInfo = null;
     private static JTable table;
-    private JScrollPane tableScrollPane;
+    private static JScrollPane tableScrollPane;
     private static NewTableModel model = new NewTableModel(null);
-    private JTextArea textArea = new JTextArea();
+    private static JTextArea textArea = new JTextArea();
+    private static JComboBox<String> comboBox = new JComboBox<>();
 
     public MainView() {
 
@@ -40,6 +36,7 @@ public class MainView extends JFrame {
 
     public void addFrm() {
         Font font = new Font("times new roman", Font.PLAIN, 12);
+//
         setTitle("Main");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 550);
@@ -86,10 +83,19 @@ public class MainView extends JFrame {
         jb3.setBounds(290, 450, 100, 30);
         add(jb3);
 
+        JButton jb4 = new JButton("+");
+        jb4.setFont(font);
+        jb4.setBounds(410, 450,40, 30);
+        add(jb4);
+
+        JButton jb5 = new JButton("-");
+        jb5.setFont(font);
+        jb5.setBounds(460, 450,40, 30);
+        add(jb5);
 
         item3.setEnabled(false);
 
-        NewTableModel model = new NewTableModel(itemService.getSelectedItem("Not Selected"));
+        model = new NewTableModel(itemService.getSelectedItem("Not Selected"));
         table = new JTable(model);
 
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -111,14 +117,16 @@ public class MainView extends JFrame {
 
         JLabel typeLabel = new JLabel("Type:");
         typeLabel.setFont(font);
-        typeLabel.setBounds(570, 450, 100, 30);
+        typeLabel.setBounds(960, 450, 40, 30);
         add(typeLabel);
 
-        JComboBox<String> comboBox = new JComboBox<>();
+
         comboBox.setEditable(false);
         comboBox.setFont(font);
-        comboBox.setBounds(610, 450, 150, 30);
+        comboBox.setBounds(1000, 450, 150, 30);
         add(comboBox);
+
+
 
         ArrayList<String> receivedItem = itemService.getTypeOptions();
 
@@ -130,22 +138,13 @@ public class MainView extends JFrame {
 
         setVisible(true);
 
+
+
         comboBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent itemEvent) {
                 if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
-
-                    String item = itemEvent.getItem().toString();
-                    List<ItemInfo> list = itemService.getSelectedItem(item);
-                    model.setItemInfo(list);
-                    model.fireTableDataChanged();
-                    //model.fireTableStructureChanged();
-                    table.setModel(model);
-                    table.validate();
-                    table.updateUI();
-                    tableScrollPane.validate();
-                    tableScrollPane.updateUI();
-                    table.clearSelection();
+                    update();
                 }
             }
         });
@@ -154,7 +153,6 @@ public class MainView extends JFrame {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
-
                     if ((table.getSelectedRow() > table.getRowCount()) || (table.getSelectedRow() < 0)) {
                         textArea.setText("");
                     }//every time after the table changed, the model will be changed, sometimes the row that user selected before the table might become unavailable which could cause invalid index
@@ -162,7 +160,6 @@ public class MainView extends JFrame {
                         textArea.setText(model.getNote(table.convertRowIndexToModel(table.getSelectedRow())));
                     }
                 }
-
             }
         });
 
@@ -174,14 +171,104 @@ public class MainView extends JFrame {
             }
         });
 
-        jb1.addActionListener(new ActionListener() {
+        item2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                EditView editView = new EditView(true);
+                editView.addFrm();
+            }
+        });
+
+        jb1.addActionListener(new ActionListener() {//Add item
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                AddView addView = new AddView(userInfo.getUser_name());
+                addView.addFrm();
+                addView.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        update();
+                        super.windowClosing(e);
+                    }
+                });
 
             }
         });
 
+        jb2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                boolean ifSuccess = false;
+                if(JOptionPane.showConfirmDialog(null, "Would you like to delete this item?","Deleting item", JOptionPane.YES_NO_OPTION) == 0){
+                    ifSuccess = itemService.deleteItem(model.getId(table.convertRowIndexToModel(table.getSelectedRow())));
+                }else {
+                    ifSuccess = true;
+                }
+                if(ifSuccess){
+                    update();
+                }else {
+                    JOptionPane.showMessageDialog(null, "Item deletion failed", "Warning", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        jb3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                update();
+            }
+        });
+
+        jb4.addActionListener(new ActionListener() {// "+"
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+                if(itemService.changeItemNumber(model.getId(table.convertRowIndexToModel(table.getSelectedRow())),1)){
+                    update();
+                    return;
+                }
+                JOptionPane.showMessageDialog(null, "Item addition failed", "Warning", JOptionPane.ERROR_MESSAGE);
+
+            }
+        });
+
+        jb5.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                int row = model.getId(table.convertRowIndexToModel(table.getSelectedRow()));
+                boolean ifSuccess = false;
+                if(itemService.onlyOneLeft(row)){
+                    if(JOptionPane.showConfirmDialog(null, "This item has only one left, reducing would delete it, continue?","Only one left", JOptionPane.YES_NO_OPTION) == 0){
+                        ifSuccess = itemService.deleteItem(row);
+                    }else {
+                        ifSuccess = true;
+                    }
+
+                }
+                else if(itemService.changeItemNumber(row,-1)){
+                    ifSuccess = true;
+                }
+                if(ifSuccess){
+                    update();
+                }else {
+                    JOptionPane.showMessageDialog(null, "Item reduction failed", "Warning", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
     }
 
-
+    public static void update(){
+        String item = Objects.requireNonNull(comboBox.getSelectedItem()).toString();
+        List<ItemInfo> list = itemService.getSelectedItem(item);
+        table.clearSelection();
+        model.setItemInfo(list);
+        model.fireTableDataChanged();
+        model.fireTableStructureChanged();
+        table.setModel(model);
+        table.validate();
+        table.updateUI();
+        tableScrollPane.validate();
+        tableScrollPane.updateUI();
+        table.clearSelection();
+    }
 }

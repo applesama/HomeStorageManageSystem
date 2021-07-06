@@ -99,7 +99,7 @@ public class LoginView extends JFrame {
             userInfo = userService.getUserByIdAndPwd(userInput, passInput);
             System.out.println(userInfo);
             if(userInfo == null){
-                JOptionPane.showMessageDialog(null, "Password or username may wrong", "Warning", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Password or username might be wrong", "Warning", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             this.dispose();
