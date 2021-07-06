@@ -5,14 +5,11 @@ import com.Model.UserInfo;
 import com.Other.NewTableModel;
 import com.Service.ItemService;
 import com.Service.UserService;
-
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -174,10 +171,18 @@ public class MainView extends JFrame {
             }
         });
 
+        item2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                EditView editView = new EditView(true);
+                editView.addFrm();
+            }
+        });
+
         jb1.addActionListener(new ActionListener() {//Add item
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                AddView addView = new AddView("adder");
+                AddView addView = new AddView(userInfo.getUser_name());
                 addView.addFrm();
                 addView.addWindowListener(new WindowAdapter() {
                     @Override
@@ -187,6 +192,30 @@ public class MainView extends JFrame {
                     }
                 });
 
+            }
+        });
+
+        jb2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                boolean ifSuccess = false;
+                if(JOptionPane.showConfirmDialog(null, "Would you like to delete this item?","Deleting item", JOptionPane.YES_NO_OPTION) == 0){
+                    ifSuccess = itemService.deleteItem(model.getId(table.convertRowIndexToModel(table.getSelectedRow())));
+                }else {
+                    ifSuccess = true;
+                }
+                if(ifSuccess){
+                    update();
+                }else {
+                    JOptionPane.showMessageDialog(null, "Item deletion failed", "Warning", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        jb3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                update();
             }
         });
 
@@ -203,7 +232,7 @@ public class MainView extends JFrame {
             }
         });
 
-        jb5.addActionListener(new ActionListener() {// "-"
+        jb5.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 int row = model.getId(table.convertRowIndexToModel(table.getSelectedRow()));
@@ -211,7 +240,6 @@ public class MainView extends JFrame {
                 if(itemService.onlyOneLeft(row)){
                     if(JOptionPane.showConfirmDialog(null, "This item has only one left, reducing would delete it, continue?","Only one left", JOptionPane.YES_NO_OPTION) == 0){
                         ifSuccess = itemService.deleteItem(row);
-                        //table.clearSelection();
                     }else {
                         ifSuccess = true;
                     }
@@ -228,6 +256,7 @@ public class MainView extends JFrame {
             }
         });
     }
+
     public static void update(){
         String item = Objects.requireNonNull(comboBox.getSelectedItem()).toString();
         List<ItemInfo> list = itemService.getSelectedItem(item);
@@ -242,5 +271,4 @@ public class MainView extends JFrame {
         tableScrollPane.updateUI();
         table.clearSelection();
     }
-
 }

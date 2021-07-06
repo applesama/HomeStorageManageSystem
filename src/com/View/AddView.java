@@ -1,7 +1,5 @@
 package com.View;
 
-import com.Model.ItemInfo;
-import com.Model.UserInfo;
 import com.Service.ItemService;
 import org.jdesktop.swingx.JXDatePicker;
 
@@ -13,27 +11,21 @@ import javax.swing.text.PlainDocument;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
 public class AddView extends JFrame {
-    private String user = new String();
+    private String user = "";
     private ItemService itemService = new ItemService();
 
-    public AddView() {
-
-    }
     public AddView(String user) {
         this.user = user;
     }
 
     public void addFrm(){
         Font font = new Font("times new roman", Font.PLAIN, 12);
-        setTitle("Add");
+        setTitle("Add item");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(550, 300);
         setResizable(false);
@@ -46,7 +38,6 @@ public class AddView extends JFrame {
         nameLabel.setBounds(20, 20 , 70, 30);
         add(nameLabel);
         JTextField nameField = new JTextField(30);
-        nameField.setFont(font);
         nameField.setBounds(100, 20, 150, 30);
         add(nameField);
 
@@ -55,13 +46,13 @@ public class AddView extends JFrame {
         typeLabel.setBounds(20, 60 , 70, 30);
         add(typeLabel);
         JComboBox<String> typeField = new JComboBox<>();
+        typeField.setFont(font);
         ArrayList<String> receivedItem = itemService.getTypeOptions();
         typeField.addItem("");
         typeField.setEditable(true);
         for (String s : receivedItem) {
             typeField.addItem(s);//may have bad performance when adding too much items, should be override
         }
-        typeField.setFont(font);
         typeField.setBounds(100, 60, 150, 30);
         add(typeField);
 
@@ -121,12 +112,12 @@ public class AddView extends JFrame {
                     return;
                 }
                 int number;
-                if(numberField.getText().equals("")){
+                if(numberField.getText().equals("")||numberField.getText().equals("0")){
                     number = 1;
                 }else {
                     number = Integer.parseInt(numberField.getText());
                 }
-                if(itemService.addItem(nameField.getText(), Objects.requireNonNull(typeField.getSelectedItem()).toString(), number, new java.sql.Date(datePicker.getDate().getTime()), "Adder", textArea.getText(),new java.sql.Date(new Date().getTime()))) {
+                if(itemService.addItem(nameField.getText(), Objects.requireNonNull(typeField.getSelectedItem()).toString(), number, new java.sql.Date(datePicker.getDate().getTime()), user, textArea.getText(),new java.sql.Date(new Date().getTime()))) {
                     JOptionPane.showMessageDialog(null, "Item added", "Message", JOptionPane.INFORMATION_MESSAGE);
                     return;
                 }
