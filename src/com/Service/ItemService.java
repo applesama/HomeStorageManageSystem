@@ -15,7 +15,7 @@ public class ItemService {
     }
 
     public List<ItemInfo> getSelectedItem(String selection){
-        if(selection == "Not Selected"){
+        if((selection.equals("Not Selected"))||(selection.equals("未选择"))){
             return itemDAO.queryMulti("SELECT * FROM item", ItemInfo.class);
         }
         return itemDAO.queryMulti("SELECT * FROM item WHERE item_type = ?", ItemInfo.class, selection);
@@ -37,5 +37,9 @@ public class ItemService {
     public boolean changeItemNumber(int id, int number){
 
         return itemDAO.dmlUpdate("UPDATE item set item_number = item_number + ? WHERE item_id = ?", number, id) > 0;
+    }
+
+    public boolean ifItemExist(String selection){
+        return itemDAO.queryMulti("SELECT item_type FROM item WHERE item_type = ?", ItemInfo.class, selection) != null;
     }
 }
